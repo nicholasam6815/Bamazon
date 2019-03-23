@@ -1,7 +1,6 @@
 var inquirer = require('inquirer');
 var mysql = require('mysql');
 
-// MySQL connection parameters
 var connection = mysql.createConnection({
 	host: 'localhost',
 	port: 8889,
@@ -18,11 +17,11 @@ function validateNum(value) {
 	if (integer && (sign === 1)) {
 		return true;
 	} else {//if not
-		return 'Please enter a whole non-zero number.'; // function to only enter # when prompt a question
+		return 'Please enter a whole non-zero number.'; 
 	}
 }
 
-function Purchase() { // purchase will prompt the user for the item/quantity they would like to purchase
+function Purchase() { 
 	inquirer.prompt([
 		{
 			type: 'input',
@@ -50,14 +49,14 @@ function Purchase() { // purchase will prompt the user for the item/quantity the
 		connection.query(queryStr, {item_id: item}, function(err, data) {
 			if (err) throw err;
 			if (data.length === 0) {
-				console.log('ERROR: Invalid Item ID. Please select a valid Item ID.'); // Error if the Item ID doesn't exist
+				console.log('ERROR: Invalid Item ID. Please select a valid Item ID.'); 
 				Inventory();
 			} 
 			else {
-				var DB = data[0]; //item and quantity in stock
+				var DB = data[0]; 
 				if (quantity <= DB.stock_quantity) {
 					console.log('Order placed!');
-					var updateDB = 'UPDATE products SET stock_quantity = ' + (DB.stock_quantity - quantity) + ' WHERE item_id = ' + item; // Update the inventory
+					var updateDB = 'UPDATE products SET stock_quantity = ' + (DB.stock_quantity - quantity) + ' WHERE item_id = ' + item; 
 					connection.query(updateDB, function(err, data) {
 						if (err) throw err;
 
@@ -65,7 +64,7 @@ function Purchase() { // purchase will prompt the user for the item/quantity the
 						console.log('Thank you for shopping with us!');
 						console.log("\n---------------------------------------------------------------------\n");
 
-						// End the database connection
+				
 						connection.end();
 					})
 				} else {
@@ -81,7 +80,7 @@ function Purchase() { // purchase will prompt the user for the item/quantity the
 }
 
 
-function Inventory() { // current inventory from the database and output it to the console
+function Inventory() { 
 	queryStr = 'SELECT * FROM products';
 	connection.query(queryStr, function(err, data) {
 		if (err) throw err;
